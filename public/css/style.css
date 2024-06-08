@@ -1,0 +1,72 @@
+/* TODO: style each page */
+body {
+    background-color: #f8f9fa;
+}
+
+#messages {
+    background-color: #ffffff;
+}
+
+#text {
+    resize: none;
+    height: auto;
+    line-height: 1;
+}
+
+#messages .message {
+    border-radius: 5px;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+}
+
+#messages .even {
+    background-color: #dfe0e2;
+}
+
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: nowrap;
+}
+
+.message-header > div {
+    display: flex;
+    align-items: flex-start;
+}
+
+.message-header > div > p {
+    margin: 0;
+    padding-right: 0.5rem;
+}
+
+.message-timestamp {
+    margin-left: auto;
+    font-size: 0.875rem;
+    color: #666;
+}
+
+.message-text {
+    margin-left: 0.5rem;
+    white-space: pre-wrap;
+}
+
+#nickname-display {
+    font-weight: 500;
+    font-size: 1.5rem;
+}
+
+a.btn-primary {
+    color: #fff;
+    text-decoration: none;
+}
+
+.modal-content {
+    padding: 20px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
