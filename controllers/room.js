@@ -13,6 +13,7 @@ async function getRoom(request, response) {
 
 async function getMessages(request, response) {
     const { roomName } = request.params;
+    console.log(`Getting messages in room '${roomName}'`);
     const messages = await Message.find({ roomName }).sort({ datetime: 1 });
     response.json(messages);
 }
@@ -26,8 +27,31 @@ async function postMessage(request, response) {
     response.sendStatus(200);
 }
 
+async function searchMessages(request, response) {
+    const { roomName } = request.params;
+    const { query } = request.query;
+
+    console.log(`Search in room '${roomName}' for query '${query}'`);
+
+    try {
+        const messages = await Message.find({
+            roomName,
+            text: { $regex: query, $options: 'i' }
+        }).sort({ datetime: 1 });
+
+        console.log(`Found ${messages.length} messages for query '${query}' in room '${roomName}'`);
+
+        response.json(messages);
+    } catch (error) {
+        console.error('Error searching messages:', error);
+        response.status(500).send("Error processing search request");
+    }
+}
+
+
 module.exports = {
     getRoom,
     getMessages,
-    postMessage
+    postMessage,
+    searchMessages
 };
