@@ -1,32 +1,28 @@
 <div class="container mt-5">
-    <h1 class="mb-4">{{title}}</h1>
-    <div class="row">
-        <div class="col-md-6">
-            <form action="/create" method="POST" class="form-inline">
-                <button type="submit" class="btn btn-primary mb-2">Create Room</button>
-            </form>
-        </div>
+  <h1 class="mb-4">{{title}}</h1>
+  <div class="row">
+    <div class="col-md-6">
+      <form action="/create" method="POST" class="form-inline">
+        <button type="submit" class="btn btn-primary mb-2">Create Room</button>
+      </form>
     </div>
-    <div class="row">
-        <div class="col-md-6">
-            <h3>Available Chatrooms</h3>
-            <ul class="list-group">
-                {{#each chatrooms}}
-                <li class="list-group-item">
-                    <a href="/{{this.roomName}}" class="room-link">{{this.roomName}}</a>
-                </li>
-                {{/each}}
-            </ul>
-        </div>
+    <div class="col-md-6 text-right">
+      <div id="auth-buttons">
+      </div>
     </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3>Available Chatrooms</h3>
+      <ul class="list-group">
+        {{#each chatrooms}}
+          <li class="list-group-item">
+            <a href="/{{this.roomName}}" class="room-link">{{this.roomName}}</a>
+          </li>
+        {{/each}}
+      </ul>
+    </div>
+  </div>
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        document.querySelectorAll('.room-link').forEach(link => {
-            link.addEventListener('click', () => {
-                localStorage.removeItem('nickname');
-            });
-        });
-    });
-</script>
+<script src="/js/homeScript.js"></script>
