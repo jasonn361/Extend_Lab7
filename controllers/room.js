@@ -36,7 +36,7 @@ async function searchMessages(request, response) {
     try {
         const messages = await Message.find({
             roomName,
-            text: { $regex: query, $options: 'i' }
+            text: { $regex: `^${query}$`, $options: 'i' }
         }).sort({ datetime: 1 });
 
         console.log(`Found ${messages.length} messages for query '${query}' in room '${roomName}'`);

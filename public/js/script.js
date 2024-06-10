@@ -10,8 +10,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('search-form').addEventListener('submit', (e) => {
         e.preventDefault();
-        searchMessages(roomName);
+
+        const searchQuery = document.getElementById('search').value.trim();
+
+        if (!searchQuery) {
+            return;
+        } else {
+            searchMessages(roomName, searchQuery);
+        }
     });
+
+    document.getElementById('clear-search').addEventListener('click', () => {
+        // Clear the search input
+        document.getElementById('search').value = '';
+        // Hide and clear the search results
+        const searchResultsDiv = document.getElementById('search-results');
+        searchResultsDiv.style.display = 'none';
+        searchResultsDiv.innerHTML = '';
+
+        // Remove the classes from the respective elements
+        const messagesDiv = document.getElementById('messages');
+        const contentContainer = document.getElementById('content-container');
+
+        messagesDiv.classList.remove('col-md-7');
+        contentContainer.classList.remove('row', 'justify-content-between');
+    });
+
 });
 
 let chatroomInitialized = false;
@@ -47,7 +71,6 @@ function initializeChatroom(roomName) {
                         </div>
                     </div>`
                 ).join('');
-                scrollToBottom(messagesDiv);
             });
     }
 
@@ -63,6 +86,7 @@ function initializeChatroom(roomName) {
             document.getElementById('text').value = '';
             loadMessages();
         });
+
     }
 
     document.getElementById('message-form').addEventListener('submit', submitMessage);
@@ -100,23 +124,34 @@ function initializeChatroom(roomName) {
     }
 }
 
-async function searchMessages(roomName) {
-    const searchQuery = document.getElementById('search').value;
+async function searchMessages(roomName, searchQuery) {
     const response = await fetch(`/${roomName}/search?query=${encodeURIComponent(searchQuery)}`);
     const messages = await response.json();
 
     console.log(`Received ${messages.length} messages`);
-
+    
     const messagesDiv = document.getElementById('messages');
-    messagesDiv.innerHTML = messages.map((message, index) => 
-        `<div class="message ${index % 2 === 0 ? 'even' : 'odd'}">
-            <div class="message-header">
-                <div>
-                    <p><strong>${message.nickname}</strong>:</p>
-                    <span class="message-text">${message.text.replace(/\n/g, '<br>')}</span>
+    const searchResultsDiv = document.getElementById('search-results');
+    const contentContainer = document.getElementById('content-container');
+
+    messagesDiv.classList.add("col-md-7");
+    contentContainer.classList.add("row", "justify-content-around");
+    searchResultsDiv.style.display = 'block';
+
+    if (messages.length > 0) {
+        searchResultsDiv.innerHTML = messages.map((message, index) => 
+            `<div class="message ${index % 2 === 0 ? 'even' : 'odd'}">
+                <div class="message-header">
+                    <div>
+                        <p><strong>${message.nickname}</strong>:</p>
+                        <span class="message-text">${message.text.replace(/\n/g, '<br>')}</span>
+                    </div>
+                    <span class="message-timestamp">${new Date(message.datetime).toLocaleString()}</span>
                 </div>
-                <span class="message-timestamp">${new Date(message.datetime).toLocaleString()}</span>
-            </div>
-        </div>`
-    ).join('');
+            </div>`
+        ).join('');
+    } else {
+        searchResultsDiv.innerHTML = '<div class="message">No messages found.</div>';
+    }
+
 };

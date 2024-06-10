@@ -5,12 +5,16 @@
     </div>
 
     <!-- Search Form -->
-    <form id="search-form" class="mb-3 d-flex ">
+    <form id="search-form" class="mb-3 d-flex position-relative">
         <input type="text" id="search" placeholder="Search messages" class="form-control mr-2">
         <button type="submit" class="btn btn-info">Search</button>
+        <button type="button" id="clear-search" class="btn btn-sm btn-secondary position-absolute" style="right: 6rem; top: 50%; transform: translateY(-50%);">X</button>
     </form>
 
-    <div id="messages" class="border rounded p-3 mb-3" style="height: 400px; overflow-y: scroll;"></div>
+    <div id="content-container">
+        <div id="messages" class="border rounded p-3 mb-3" style="height: 400px; overflow-y: scroll;"></div>
+        <div id="search-results" class="col-md-4 border rounded p-3 mb-3" style="height: 400px; overflow-y: scroll;"></div>
+    </div>
 
     <h2 id="nickname-display"></h2>
     <form id="message-form" class="form-inline w-100 d-flex flex-column align-items-center">
@@ -20,6 +24,7 @@
         <button type="submit" class="btn btn-primary mt-2 w-100">Send</button>
     </form>
 </div>
+
 
 <!-- Modal -->
 <div class="modal fade" id="nicknameModal" tabindex="-1" aria-labelledby="nicknameModalLabel" aria-hidden="true" data-keyboard="false">
@@ -40,8 +45,4 @@
         </div>
     </div>
 </div>
-
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="/js/script.js"></script>

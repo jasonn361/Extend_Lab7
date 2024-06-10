@@ -9,6 +9,7 @@ body {
 
 #search-results {
     display: none;
+    width: 0;
     background-color: #dfe0e2;
 }
 
@@ -81,16 +82,4 @@ a.btn-primary {
     border: 1px solid #ccc;
     background-color: #fff;
     color: #333;
-}
-
-.row-cols-2 {
-    display: flex;
-}
-.col-md-6 {
-    flex: 0 0 50%;
-    max-width: 50%;
-}
-.col-md-12 {
-    flex: 0 0 100%;
-    max-width: 100%;
 }
