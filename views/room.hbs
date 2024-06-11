@@ -1,11 +1,18 @@
 <div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 id="roomName">Chatroom: {{roomName}}</h1>
+        <h1 id="room-name">{{ roomName }}</h1>
         <a href="/" class="btn btn-primary">Home</a>
     </div>
+
+    <!-- Search Form -->
+    <form id="search-form" class="mb-3 d-flex ">
+        <input type="text" id="search" placeholder="Search messages" class="form-control mr-2">
+        <button type="submit" class="btn btn-info">Search</button>
+    </form>
+
     <div id="messages" class="border rounded p-3 mb-3" style="height: 400px; overflow-y: scroll;"></div>
 
-    <h2 id="nickname-display">Nickname: </h2>
+    <h2 id="nickname-display"></h2>
     <form id="message-form" class="form-inline w-100 d-flex flex-column align-items-center">
         <div class="form-group w-100 d-flex align-items-center" style="height: 100px;">
             <textarea id="text" name="text" class="form-control w-100" placeholder="Enter your message" required style="resize: none; height: auto;"></textarea>
@@ -38,13 +45,3 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="/js/script.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const roomName = "{{ roomName }}";
-        $('#nicknameModal').modal({
-            keyboard: false,
-            backdrop: 'static'
-        });
-        initializeChatroom(roomName);
-    });
-</script>

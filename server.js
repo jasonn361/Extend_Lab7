@@ -51,10 +51,10 @@ app.get("/signup", signupHandler.getSignup);
 app.post("/signup", signupHandler.postSignup);
 app.post("/login", signupHandler.postLogin);
 app.post("/logout", signupHandler.logout);
-
 app.get("/:roomName", roomHandler.getRoom);
 app.get("/:roomName/messages", roomHandler.getMessages);
 app.post("/:roomName/messages", roomHandler.postMessage);
+app.get("/:roomName/search", roomHandler.searchMessages);
 
 app.listen(port, () =>
   console.log(`Server listening on http://localhost:${port}`)

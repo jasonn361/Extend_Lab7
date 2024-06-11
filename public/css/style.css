@@ -7,6 +7,11 @@ body {
     background-color: #ffffff;
 }
 
+#search-results {
+    display: none;
+    background-color: #dfe0e2;
+}
+
 #text {
     resize: none;
     height: auto;
@@ -52,6 +57,7 @@ body {
 }
 
 #nickname-display {
+    margin: 20px 0 0 0;
     font-weight: 500;
     font-size: 1.5rem;
 }
@@ -69,4 +75,22 @@ a.btn-primary {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+#clear-search {
+    border: 1px solid #ccc;
+    background-color: #fff;
+    color: #333;
+}
+
+.row-cols-2 {
+    display: flex;
+}
+.col-md-6 {
+    flex: 0 0 50%;
+    max-width: 50%;
+}
+.col-md-12 {
+    flex: 0 0 100%;
+    max-width: 100%;
 }
