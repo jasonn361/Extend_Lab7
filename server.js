@@ -10,7 +10,6 @@ const roomHandler = require('./controllers/room');
 const app = express();
 const port = 8080;
 
-// Use your MongoDB Atlas connection string here
 const mongoURI = 'mongodb+srv://hnguy513:OdoXPO84kYDxjG4f@cluster0.owidxmi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
