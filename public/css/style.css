@@ -1,96 +1,97 @@
 /* TODO: style each page */
 body {
-    background-color: #f8f9fa;
+  background-color: #f8f9fa;
 }
 
 #messages {
-    background-color: #ffffff;
+  background-color: #ffffff;
 }
 
 #search-results {
-    display: none;
-    background-color: #dfe0e2;
+  display: none;
+  width: 0;
+  background-color: #dfe0e2;
 }
 
 #text {
-    resize: none;
-    height: auto;
-    line-height: 1;
+  resize: none;
+  height: auto;
+  line-height: 1;
 }
 
 #messages .message {
-    border-radius: 5px;
-    margin-bottom: 0.5rem;
-    padding: 0.5rem;
+  border-radius: 5px;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
 }
 
 #messages .even {
-    background-color: #dfe0e2;
+  background-color: #dfe0e2;
 }
 
 .message-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    flex-wrap: nowrap;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: nowrap;
 }
 
 .message-header > div {
-    display: flex;
-    align-items: flex-start;
+  display: flex;
+  align-items: flex-start;
 }
 
 .message-header > div > p {
-    margin: 0;
-    padding-right: 0.5rem;
+  margin: 0;
+  padding-right: 0.5rem;
 }
 
 .message-timestamp {
-    margin-left: auto;
-    font-size: 0.875rem;
-    color: #666;
+  margin-left: auto;
+  font-size: 0.875rem;
+  color: #666;
 }
 
 .message-text {
-    margin-left: 0.5rem;
-    white-space: pre-wrap;
+  margin-left: 0.5rem;
+  white-space: pre-wrap;
 }
 
 #nickname-display {
-    margin: 20px 0 0 0;
-    font-weight: 500;
-    font-size: 1.5rem;
+  margin: 20px 0 0 0;
+  font-weight: 500;
+  font-size: 1.5rem;
 }
 
 a.btn-primary {
-    color: #fff;
-    text-decoration: none;
+  color: #fff;
+  text-decoration: none;
 }
 
 .modal-content {
-    padding: 20px;
+  padding: 20px;
 }
 
 .modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 #clear-search {
-    border: 1px solid #ccc;
-    background-color: #fff;
-    color: #333;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  color: #333;
 }
 
 .row-cols-2 {
-    display: flex;
+  display: flex;
 }
 .col-md-6 {
-    flex: 0 0 50%;
-    max-width: 50%;
+  flex: 0 0 50%;
+  max-width: 50%;
 }
 .col-md-12 {
-    flex: 0 0 100%;
-    max-width: 100%;
+  flex: 0 0 100%;
+  max-width: 100%;
 }

@@ -55,6 +55,8 @@ app.get("/:roomName", roomHandler.getRoom);
 app.get("/:roomName/messages", roomHandler.getMessages);
 app.post("/:roomName/messages", roomHandler.postMessage);
 app.get("/:roomName/search", roomHandler.searchMessages);
+app.delete("/messages/:messageId", roomHandler.deleteMessage);
+app.put("/messages/:messageId", roomHandler.editMessage);
 
 app.listen(port, () =>
   console.log(`Server listening on http://localhost:${port}`)
