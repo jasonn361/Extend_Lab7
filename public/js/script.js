@@ -58,32 +58,112 @@ function initializeChatroom(roomName) {
     fetch(`/${roomName}/messages`)
       .then((response) => response.json())
       .then((messages) => {
+        const currentNickname =
+          document.getElementById("currentNickname").value;
         const messagesDiv = document.getElementById("messages");
         messagesDiv.innerHTML = messages
           .map(
             (message, index) =>
-              `<div class="message ${index % 2 === 0 ? "even" : "odd"}">
-                        <div class="message-header">
+              `<div class="message ${
+                index % 2 === 0 ? "even" : "odd"
+              }" data-id="${message._id}">
+                        <div class="message-header d-flex justify-content-between align-items-center">
                             <div>
                                 <p><strong>${message.nickname}</strong>:</p>
                                 <span class="message-text">${message.text.replace(
                                   /\n/g,
                                   "<br>"
                                 )}</span>
+                              ${
+                                message.edited
+                                  ? '<span class="edited">(edited)</span>'
+                                  : ""
+                              }  
                             </div>
-                            <span class="message-timestamp">${new Date(
-                              message.datetime
-                            ).toLocaleString()}</span>
+                            <div class="ml-auto">
+                              ${
+                                message.nickname === currentNickname
+                                  ? `<button class="btn btn-primary btn-sm edit-button">Edit</button>
+                             <button class="btn btn-danger btn-sm delete-button">Delete</button>`
+                                  : ""
+                              }
+                    </div>
+
                         </div>
+                        <span class="message-timestamp">${new Date(
+                          message.datetime
+                        ).toLocaleString()}</span>
                     </div>`
           )
           .join("");
+
+        document.querySelectorAll(".edit-button").forEach((button) => {
+          button.addEventListener("click", handleEditMessage);
+        });
+
+        document.querySelectorAll(".delete-button").forEach((button) => {
+          button.addEventListener("click", handleDeleteMessage);
+        });
       });
+  }
+
+  async function handleEditMessage(event) {
+    const messageElement = event.target.closest(".message");
+    const messageId = messageElement.getAttribute("data-id");
+    const newText = prompt(
+      "Edit your message:",
+      messageElement.querySelector(".message-text").innerText
+    );
+    if (newText) {
+      try {
+        const response = await fetch(`/messages/${messageId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            text: newText,
+            nickname: document.getElementById("currentNickname").value,
+          }),
+        });
+        if (response.ok) {
+          loadMessages();
+        } else {
+          console.error("Failed to edit message:", await response.text());
+        }
+      } catch (error) {
+        console.error("Error editing message:", error);
+      }
+    }
+  }
+
+  async function handleDeleteMessage(event) {
+    const messageElement = event.target.closest(".message");
+    const messageId = messageElement.getAttribute("data-id");
+    try {
+      const response = await fetch(`/messages/${messageId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nickname: document.getElementById("currentNickname").value,
+        }),
+      });
+      if (response.ok) {
+        loadMessages();
+      } else {
+        console.error("Failed to delete message:", await response.text());
+      }
+    } catch (error) {
+      console.error("Error deleting message:", error);
+    }
   }
 
   function submitMessage(e) {
     e.preventDefault();
     const text = document.getElementById("text").value;
+    const nickname = document.getElementById("currentNickname").value;
     fetch(`/${roomName}/messages`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -107,6 +187,7 @@ function initializeChatroom(roomName) {
   document.getElementById("nickname-form").addEventListener("submit", (e) => {
     e.preventDefault();
     nickname = document.getElementById("nickname").value;
+    document.getElementById("currentNickname").value = nickname;
     $("#nicknameModal").modal("hide");
     updateNicknameDisplay(nickname);
   });
@@ -126,7 +207,9 @@ function initializeChatroom(roomName) {
   }
 
   function updateNicknameDisplay(nickname) {
-    document.getElementById("nickname-display").innerText = `${nickname}`;
+    document.getElementById(
+      "nickname-display"
+    ).innerText = `Nickname: ${nickname}`;
   }
 
   function scrollToBottom(element) {
