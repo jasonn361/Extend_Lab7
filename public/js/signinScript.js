@@ -1,8 +1,11 @@
+import { auth, provider, signInWithPopup, signOut } from "./firebase.js";
+
 document.addEventListener("DOMContentLoaded", () => {
   const formTitle = document.getElementById("form-title");
   const toggleText = document.getElementById("toggle-text");
   const signupForm = document.getElementById("signup-form");
   const loginForm = document.getElementById("login-form");
+  const googleSignInButton = document.getElementById("google-signin");
 
   const updateToggleLink = () => {
     const toggleLink = document.getElementById("toggle-link");
@@ -98,5 +101,23 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("Error during login:", error);
       alert("Login failed. Please try again.");
     }
+  });
+
+  googleSignInButton.addEventListener("click", () => {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        const user = result.user;
+        const userData = {
+          username: user.displayName,
+          email: user.email,
+        };
+        localStorage.setItem("loggedInUser", JSON.stringify(userData));
+        alert("Login successful");
+        window.location.href = "/";
+      })
+      .catch((error) => {
+        console.error("Error during Google sign-in:", error);
+        alert("Google sign-in failed. Please try again.");
+      });
   });
 });
