@@ -8,7 +8,7 @@ async function getRoom(request, response) {
         return response.status(404).send('Chatroom not found');
     }
 
-    response.render('room', { title: 'Chatroom', roomName });
+    response.render('room', { title: 'Chatroom', roomName, nickname: request.query.nickname });
 }
 
 async function getMessages(request, response) {
@@ -26,8 +26,38 @@ async function postMessage(request, response) {
     response.sendStatus(200);
 }
 
+async function deleteMessage(request, response) {
+    const { messageId } = request.params;
+    const { nickname } = request.body;
+    const message = await Message.findById(messageId);
+    
+    if (message.nickname === nickname) {
+        await Message.findByIdAndDelete(messageId);
+        response.sendStatus(200);
+    } else {
+        response.status(403).send('Forbidden: You can only delete your own messages.');
+    }
+}
+
+async function editMessage(request, response) {
+    const { messageId } = request.params;
+    const { text, nickname } = request.body;
+    const message = await Message.findById(messageId);
+
+    if (message.nickname === nickname) {
+        message.text = text;
+        message.edited = true;
+        await message.save();
+        response.sendStatus(200);
+    } else {
+        response.status(403).send('Forbidden: You can only edit your own messages.');
+    }
+}
+
 module.exports = {
     getRoom,
     getMessages,
-    postMessage
+    postMessage,
+    deleteMessage,
+    editMessage
 };
