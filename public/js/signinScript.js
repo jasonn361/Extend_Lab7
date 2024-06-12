@@ -1,5 +1,16 @@
 import { auth, provider, signInWithPopup, signOut } from "./firebase.js";
 
+// Utility function to check if an email is incomplete
+const checkIncompleteEmail = (email) => {
+  const emailParts = email.split("@");
+  return emailParts.length === 1 || emailParts[1].trim() === "";
+};
+
+// Function to show error messages
+const showErrorMessages = (errors) => {
+  alert(errors.join("\n"));
+};
+
 document.addEventListener("DOMContentLoaded", () => {
   const formTitle = document.getElementById("form-title");
   const toggleText = document.getElementById("toggle-text");
@@ -32,15 +43,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
   signupForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const username = document.getElementById("signup-username").value;
-    const email = document.getElementById("signup-email").value;
-    const password = document.getElementById("signup-password").value;
-    const confirmPassword = document.getElementById(
-      "signup-confirm-password"
-    ).value;
+    const username = document.getElementById("signup-username").value.trim();
+    const email = document.getElementById("signup-email").value.trim();
+    const password = document.getElementById("signup-password").value.trim();
+    const confirmPassword = document.getElementById("signup-confirm-password").value.trim();
 
+    const errors = [];
+    if (!username) {
+      errors.push("Username is required.");
+    }
+    if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+      errors.push("Invalid username. Use only letters, numbers, and underscores.");
+    }
+    if (!email) {
+      errors.push("Email is required.");
+    } else if (checkIncompleteEmail(email)) {
+      const emailProvider = prompt("It seems like you forgot to add the domain part of your email. Is it gmail.com, hotmail.com, or another domain?");
+      if (emailProvider) {
+        document.getElementById("signup-email").value = `${email}@${emailProvider}`;
+        return;
+      } else {
+        errors.push("Incomplete email.");
+      }
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      errors.push("Invalid email format.");
+    }
+    if (!password) {
+      errors.push("Password is required.");
+    } else if (password.length < 6) {
+      errors.push("Password must be at least 6 characters long.");
+    }
     if (password !== confirmPassword) {
-      alert("Passwords do not match");
+      errors.push("Passwords do not match.");
+    }
+
+    if (errors.length > 0) {
+      showErrorMessages(errors);
       return;
     }
 
@@ -52,29 +90,47 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         body: JSON.stringify({ username, email, password, confirmPassword }),
       });
-      if (response.headers.get("content-type").includes("application/json")) {
-        const result = await response.json();
-        if (response.ok) {
-          localStorage.setItem("loggedInUser", JSON.stringify(result.user));
-          alert("Signup successful");
-          window.location.href = "/";
-        } else {
-          alert(result.error);
-        }
+      const result = await response.json();
+      if (response.ok) {
+        localStorage.setItem("loggedInUser", JSON.stringify(result.user));
+        alert("Signup successful");
+        window.location.href = "/";
       } else {
-        console.error("Unexpected response:", await response.text());
-        alert("Unexpected response from server.");
+        showErrorMessages([result.error]);
       }
     } catch (error) {
       console.error("Error during signup:", error);
-      alert("Signup failed. Please try again.");
+      showErrorMessages(["Signup failed. Please try again."]);
     }
   });
 
   loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const email = document.getElementById("login-email").value;
-    const password = document.getElementById("login-password").value;
+    const email = document.getElementById("login-email").value.trim();
+    const password = document.getElementById("login-password").value.trim();
+
+    const errors = [];
+    if (!email) {
+      errors.push("Email is required.");
+    } else if (checkIncompleteEmail(email)) {
+      const emailProvider = prompt("It seems like you forgot to add the domain part of your email. Is it gmail.com, hotmail.com, or another domain?");
+      if (emailProvider) {
+        document.getElementById("login-email").value = `${email}@${emailProvider}`;
+        return;
+      } else {
+        errors.push("Incomplete email.");
+      }
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      errors.push("Invalid email format.");
+    }
+    if (!password) {
+      errors.push("Password is required.");
+    }
+
+    if (errors.length > 0) {
+      showErrorMessages(errors);
+      return;
+    }
 
     try {
       const response = await fetch("/login", {
@@ -84,22 +140,17 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         body: JSON.stringify({ email, password }),
       });
-      if (response.headers.get("content-type").includes("application/json")) {
-        const result = await response.json();
-        if (response.ok) {
-          localStorage.setItem("loggedInUser", JSON.stringify(result.user));
-          alert("Login successful");
-          window.location.href = "/";
-        } else {
-          alert(result.error);
-        }
+      const result = await response.json();
+      if (response.ok) {
+        localStorage.setItem("loggedInUser", JSON.stringify(result.user));
+        alert("Login successful");
+        window.location.href = "/";
       } else {
-        console.error("Unexpected response:", await response.text());
-        alert("Unexpected response from server.");
+        showErrorMessages([result.error]);
       }
     } catch (error) {
       console.error("Error during login:", error);
-      alert("Login failed. Please try again.");
+      showErrorMessages(["Login failed. Please try again."]);
     }
   });
 

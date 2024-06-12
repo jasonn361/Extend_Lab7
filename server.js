@@ -9,6 +9,8 @@ const mongoose = require("mongoose");
 const homeHandler = require("./controllers/home");
 const roomHandler = require("./controllers/room");
 const signupHandler = require("./controllers/signup");
+const profileHandler = require("./controllers/profile");
+const postHandler = require("./controllers/post");
 
 const app = express();
 const port = 8080;
@@ -39,7 +41,8 @@ app.engine(
   hbs({
     extname: "hbs",
     defaultLayout: "layout",
-    layoutsDir: __dirname + "/views/layouts/",
+    layoutsDir: path.join(__dirname, "views", "layouts"),
+    partialsDir: path.join(__dirname, "views", "partials"),
   })
 );
 app.set("views", path.join(__dirname, "views"));
@@ -51,6 +54,10 @@ app.get("/signup", signupHandler.getSignup);
 app.post("/signup", signupHandler.postSignup);
 app.post("/login", signupHandler.postLogin);
 app.post("/logout", signupHandler.logout);
+app.get("/profile", profileHandler.getProfile);
+app.post("/profile/update", profileHandler.updateProfile);
+app.post("/post/create", postHandler.createPost);
+app.get("/posts", postHandler.getUserPosts);
 app.get("/:roomName", roomHandler.getRoom);
 app.get("/:roomName/messages", roomHandler.getMessages);
 app.post("/:roomName/messages", roomHandler.postMessage);

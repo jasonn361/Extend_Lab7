@@ -1,0 +1,100 @@
+<!-- views/profile.hbs -->
+{{> header }}
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <h1>Profile</h1>
+      <form id="profile-form" action="/profile/update" method="POST">
+        <div class="form-group">
+          <label for="username">Username:</label>
+          <p id="username" class="form-control-static">{{user.username}}</p>
+        </div>
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <p id="email" class="form-control-static">{{user.email}}</p>
+        </div>
+        <div class="form-group">
+          <label for="bio">Bio:</label>
+          <textarea id="bio" name="bio" class="form-control">{{user.bio}}</textarea>
+        </div>
+        <div class="form-group">
+          <label for="location">Location:</label>
+          <input type="text" id="location" name="location" class="form-control" value="{{user.location}}" />
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Update Profile</button>
+      </form>
+    </div>
+
+    <div class="col-md-6">
+      <h2>Profile Information</h2>
+      <div id="profile-info">
+        <p><strong>Username:</strong> <span id="info-username">{{user.username}}</span></p>
+        <p><strong>Email:</strong> <span id="info-email">{{user.email}}</span></p>
+        <p><strong>Bio:</strong> <span id="info-bio">{{user.bio}}</span></p>
+        <p><strong>Location:</strong> <span id="info-location">{{user.location}}</span></p>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="mt-5">Posts</h2>
+  <form id="post-form" action="/post/create" method="POST">
+    <div class="form-group">
+      <textarea id="post-content" name="content" class="form-control" placeholder="What's on your mind?"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary mt-3">Post</button>
+  </form>
+  <div id="posts" class="mt-5">
+    <!-- Posts will be inserted here by JavaScript -->
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", async () => {
+    // Fetch and display posts
+    const response = await fetch("/posts");
+    const posts = await response.json();
+    const postsContainer = document.getElementById("posts");
+
+    posts.forEach(post => {
+      const postDiv = document.createElement("div");
+      postDiv.classList.add("post");
+      postDiv.innerHTML = `
+        <p>${post.content}</p>
+        <small>${new Date(post.createdAt).toLocaleString()}</small>
+      `;
+      postsContainer.appendChild(postDiv);
+    });
+
+    // Handle profile update form submission
+    const profileForm = document.getElementById("profile-form");
+    profileForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const bio = document.getElementById("bio").value;
+      const location = document.getElementById("location").value;
+
+      try {
+        const response = await fetch("/profile/update", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ bio, location }),
+        });
+        if (response.ok) {
+          // Update the profile information display
+          document.getElementById("info-bio").textContent = bio;
+          document.getElementById("info-location").textContent = location;
+          alert("Profile updated successfully");
+        } else {
+          alert("Failed to update profile");
+        }
+      } catch (error) {
+        console.error("Error updating profile:", error);
+        alert("Failed to update profile");
+      }
+    });
+  });
+</script>
+
+{{> footer }}
