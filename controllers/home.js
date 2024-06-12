@@ -3,7 +3,7 @@ const roomGenerator = require("../util/roomIdGenerator");
 
 async function getHome(request, response) {
   try {
-    const chatrooms = await Chatroom.find().lean(); // Add .lean() to get plain JS objects
+    const chatrooms = await Chatroom.find().lean();
     response.render("home", { title: "Home", chatrooms });
   } catch (error) {
     console.error("Error fetching chatrooms:", error);
