@@ -47,62 +47,46 @@ function initializeChatroom(roomName) {
     return;
   }
 
+  const loadMessages = async () => {
+      try {
+          const response = await fetch(`/${roomName}/messages`);
+          const messages = await response.json();
+          renderMessages(messages);
+      } catch (error) {
+          console.error("Error loading messages:", error);
+      }
+  };
 
-  loadMessages();
+  const renderMessages = (messages) => {
+      const currentNickname = JSON.parse(localStorage.getItem("loggedInUser")).username;
+      const messagesDiv = document.getElementById('messages');
+      messagesDiv.innerHTML = messages.map((message, index) => 
+          `<div class="message ${index % 2 === 0 ? 'even' : 'odd'}" data-id="${message._id}">
+              <div class="message-header d-flex justify-content-between align-items-center">
+                  <div>
+                      <p><strong>${message.nickname}</strong>:</p>
+                      <span class="message-text">${message.text.replace(/\n/g, '<br>')}</span>
+                      ${message.edited ? '<span class="edited">(edited)</span>' : ''}
+                  </div>
+                  <div class="ml-auto">
+                      ${message.nickname === currentNickname ? 
+                          `<button class="btn btn-primary btn-sm edit-button">Edit</button>
+                           <button class="btn btn-danger btn-sm delete-button">Delete</button>` 
+                          : ''}
+                  </div>
+              </div>
+              <span class="message-timestamp">${new Date(message.datetime).toLocaleString()}</span>
+          </div>`
+      ).join('');
 
-  function loadMessages() {
-    console.log(`Getting messages in room '${roomName}'`);
-    fetch(`/${roomName}/messages`)
-      .then((response) => response.json())
-      .then((messages) => {
-        const currentNickname =
-          document.getElementById("currentNickname").value;
-        const messagesDiv = document.getElementById("messages");
-        messagesDiv.innerHTML = messages
-          .map(
-            (message, index) =>
-              `<div class="message ${
-                index % 2 === 0 ? "even" : "odd"
-              }" data-id="${message._id}">
-                        <div class="message-header d-flex justify-content-between align-items-center">
-                            <div>
-                                <p><strong>${message.nickname}</strong>:</p>
-                                <span class="message-text">${message.text.replace(
-                                  /\n/g,
-                                  "<br>"
-                                )}</span>
-                              ${
-                                message.edited
-                                  ? '<span class="edited">(edited)</span>'
-                                  : ""
-                              }  
-                            </div>
-                            <div class="ml-auto">
-                              ${
-                                message.nickname === currentNickname
-                                  ? `<button class="btn btn-primary btn-sm edit-button">Edit</button>
-                             <button class="btn btn-danger btn-sm delete-button">Delete</button>`
-                                  : ""
-                              }
-                    </div>
-
-                        </div>
-                        <span class="message-timestamp">${new Date(
-                          message.datetime
-                        ).toLocaleString()}</span>
-                    </div>`
-          )
-          .join("");
-
-        document.querySelectorAll(".edit-button").forEach((button) => {
-          button.addEventListener("click", handleEditMessage);
-        });
-
-        document.querySelectorAll(".delete-button").forEach((button) => {
-          button.addEventListener("click", handleDeleteMessage);
-        });
+      document.querySelectorAll('.edit-button').forEach(button => {
+          button.addEventListener('click', handleEditMessage);
       });
-  }
+
+      document.querySelectorAll('.delete-button').forEach(button => {
+          button.addEventListener('click', handleDeleteMessage);
+      });
+  };
 
   async function handleEditMessage(event) {
     const messageElement = event.target.closest(".message");
