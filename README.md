@@ -50,6 +50,10 @@ Confirms that the password and confirm password fields match.
 
 ### Installation Steps
 1. Clone the repository in whichever directory.
-2. Run "npm install bcrypt mongoose express express-session cookie-parser express-handlebars
-npm install -g nodemon"
-3. npm start
+2. Run 
+```
+npm install
+npm install bcrypt mongoose express express-session cookie-parser express-handlebars
+npm install -g nodemon
+node server.js
+```
