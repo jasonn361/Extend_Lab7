@@ -1,11 +1,9 @@
+const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+
 document.addEventListener("DOMContentLoaded", () => {
   const roomName = document.getElementById("room-name").innerHTML;
   console.log(roomName);
 
-  $("#nicknameModal").modal({
-    keyboard: false,
-    backdrop: "static",
-  });
   initializeChatroom(roomName);
 
   document.getElementById("search-form").addEventListener("submit", (e) => {
@@ -49,7 +47,6 @@ function initializeChatroom(roomName) {
     return;
   }
 
-  let nickname = "";
 
   loadMessages();
 
@@ -182,19 +179,6 @@ function initializeChatroom(roomName) {
       e.preventDefault();
       document.getElementById("message-form").requestSubmit();
     }
-  });
-
-  document.getElementById("nickname-form").addEventListener("submit", (e) => {
-    e.preventDefault();
-    nickname = document.getElementById("nickname").value;
-    document.getElementById("currentNickname").value = nickname;
-    $("#nicknameModal").modal("hide");
-    updateNicknameDisplay(nickname);
-  });
-
-  $("#nicknameModal").modal({
-    keyboard: false,
-    backdrop: "static",
   });
 
   chatroomInitialized = true;
