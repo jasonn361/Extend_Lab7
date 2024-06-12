@@ -120,7 +120,7 @@ function initializeChatroom(roomName) {
           },
           body: JSON.stringify({
             text: newText,
-            nickname: document.getElementById("currentNickname").value,
+            nickname: JSON.parse(localStorage.getItem("loggedInUser")).username,
           }),
         });
         if (response.ok) {
@@ -144,7 +144,7 @@ function initializeChatroom(roomName) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          nickname: document.getElementById("currentNickname").value,
+          nickname: JSON.parse(localStorage.getItem("loggedInUser")).username,
         }),
       });
       if (response.ok) {
@@ -159,8 +159,9 @@ function initializeChatroom(roomName) {
 
   function submitMessage(e) {
     e.preventDefault();
+
     const text = document.getElementById("text").value;
-    const nickname = document.getElementById("currentNickname").value;
+    const nickname = JSON.parse(localStorage.getItem("loggedInUser")).username;
     fetch(`/${roomName}/messages`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

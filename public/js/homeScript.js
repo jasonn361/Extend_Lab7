@@ -2,6 +2,7 @@
 import { auth, signOut } from "./firebase.js";
 
 const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+console.log(loggedInUser);
 
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".room-link").forEach((link) => {
